@@ -2,26 +2,29 @@ import express from "express";
 import handlebars from "express-handlebars";
 import __dirname from "./dirname.js";
 import mongoose from "mongoose";
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
 import config from "./config/config.js";
+import MongoSingleton from './config/mongodb-singleton.js'
+import cors from 'cors';
+
 
 // Vistas
 import viewsRoutes from "./routes/views.routes.js";
-import githubLoginViewRouter from "./routes/github-login.views.js"
-import usersViewRouter from './routes/users.views.router.js';
-import productsViewRouter from "./routes/product.views.router.js"
 
 // Apis
-import productsRouter from "./routes/products.router.js"
-import cartsRouter from "./routes/carts.router.js"
-import jwtRouter from './routes/jwt.router.js'
+import productRouter from "./routes/product.router.js"
+import cartRouter from "./routes/cart.router.js"
+import userRouter from "./routes/user.router.js"
+
 
 // Custom Extended
-import UsersExtendRouter from './routes/custom/users.extend.router.js'
+import UsersExtendRouter from "./routes/custom/users.extend.router.js";
+import ProductExtendRouter from "./routes/custom/product.extend.router.js"
+import CartExtendRouter from "./routes/custom/cart.extend.router.js"
 
 // Passport imports
-import passport from 'passport';
-import initializePassport from './config/passport.config.js'
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 // Esto sirve para recorrer arrays en handlebars
 import Handlebars from "handlebars";
@@ -29,14 +32,6 @@ import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access
 
 const app = express();
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/coderhouse";
-
-// Mongo Local
-// mongoose.set("strictQuery", true);
-mongoose
-  .connect(MONGO_URL)
-  .then(() => console.log("DB connected"))
-  .catch((err) => console.log(err));
 
 // Configuración de Handlebars
 app.engine(
@@ -65,23 +60,47 @@ app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// // Configura el middleware cors con opciones personalizadas
+// const corsOptions = {
+//   // Permitir solo solicitudes desde un cliente específico
+//   origin: 'http://127.0.0.1:5502',
+
+//   // Configura los métodos HTTP permitidos
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+
+//   // Configura las cabeceras permitidas
+//   allowedHeaders: 'Content-Type,Authorization',
+
+//   // Configura si se permiten cookies en las solicitudes
+//   credentials: true,
+// };
+// app.use(cors(corsOptions));
+
 // Routes
 app.use("/", viewsRoutes);
-app.use("/api/products", productsRouter)
-app.use("/api/carts", cartsRouter)
-app.use("/productos", productsRouter)
-app.use("/carritos", cartsRouter)
-app.use("/agregar-productos", productsViewRouter)
-app.use("/github", githubLoginViewRouter)
-app.use("/api/jwt", jwtRouter)
-app.use('/users', usersViewRouter)
+app.use("/api/product", productRouter)
+app.use("/api/cart", cartRouter)
+app.use("/api/users", userRouter)
 
 const usersExtendRouter = new UsersExtendRouter();
+const productExtendRouter = new ProductExtendRouter();
+const cartExtendRouter = new CartExtendRouter();
+
 app.use("/api/extend/users", usersExtendRouter.getRouter());
-
-console.log(config);
-
+app.use("/api/extend/products", productExtendRouter.getRouter());
+app.use("/api/extend/cart", cartExtendRouter.getRouter())
 
 const SERVER_PORT = config.port;
 
-app.listen(SERVER_PORT, console.log(`Server running on port ${SERVER_PORT}` ));
+app.listen(SERVER_PORT, console.log(`Server running on port ${SERVER_PORT}`));
+
+//TODO: MongoSingleton
+const mongoInstance = async () => {
+  try {
+      await MongoSingleton.getInstance()
+  } catch (error) {
+      console.log(error);
+  }
+}
+mongoInstance()
+

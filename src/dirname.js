@@ -12,7 +12,7 @@ export const __dirname = path.dirname(__filename)
 // Configurar multer para manejar archivos
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'public/img'); // Directorio donde se guardarán los archivos
+      cb(null, 'src/public/img'); // Directorio donde se guardarán los archivos
     },
     filename: function (req, file, cb) {
       cb(null, file.originalname); // Usar el nombre original del archivo

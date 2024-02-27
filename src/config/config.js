@@ -10,9 +10,6 @@ dotenv.config({
     path: environment === "prod" ? "./src/config/.env.production" : "./src/config/.env.development"
 });
 
-console.log(process.env.PORT);
-
-
 export default {
     port: process.env.PORT,
     urlMongo: process.env.MONGO_URL,

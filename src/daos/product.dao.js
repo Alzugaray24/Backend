@@ -5,7 +5,7 @@ class productDao {
     this.model = productModel;
   }
 
-  async getAllProducts(options) {
+  async recuperarProducto(options) {
     const { limit, page, category, availability, sort, query } = options;
 
     const filter = {};
@@ -43,7 +43,7 @@ class productDao {
     return await this.model.findById(id);
   }
 
-  async createProduct(product) {
+  async guardarProducto(product) {
     return await this.model.create(product);
   }
 

@@ -9,8 +9,7 @@ logoutForm.addEventListener("submit", function(event) {
   })
   .then(response => {
     if (response.ok) {
-        console.log(response);
-        window.location.replace('/users/login')
+        
     } else {
       console.error("Error en la solicitud de logout:", response.statusText);
       // Manejar el error si es necesario

@@ -26,6 +26,8 @@ form.addEventListener("submit", async (e) => {
     
     const data = await response.json();
     
+    console.log(data);
+
     console.log("Respuesta del servidor:", data);
 
     if (data.status === "success") {
