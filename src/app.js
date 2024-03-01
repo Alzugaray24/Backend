@@ -4,23 +4,16 @@ import __dirname from "./dirname.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import config from "./config/config.js";
-import MongoSingleton from './config/mongodb-singleton.js'
-import cors from 'cors';
-
+import MongoSingleton from "./config/mongodb-singleton.js";
+import cors from "cors";
 
 // Vistas
 import viewsRoutes from "./routes/views.routes.js";
 
-// Apis
-import productRouter from "./routes/product.router.js"
-import cartRouter from "./routes/cart.router.js"
-import userRouter from "./routes/user.router.js"
-
-
 // Custom Extended
 import UsersExtendRouter from "./routes/custom/users.extend.router.js";
-import ProductExtendRouter from "./routes/custom/product.extend.router.js"
-import CartExtendRouter from "./routes/custom/cart.extend.router.js"
+import ProductExtendRouter from "./routes/custom/product.extend.router.js";
+import CartExtendRouter from "./routes/custom/cart.extend.router.js";
 
 // Passport imports
 import passport from "passport";
@@ -31,7 +24,6 @@ import Handlebars from "handlebars";
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access";
 
 const app = express();
-
 
 // Configuración de Handlebars
 app.engine(
@@ -74,13 +66,15 @@ app.use(express.urlencoded({ extended: true }));
 //   // Configura si se permiten cookies en las solicitudes
 //   credentials: true,
 // };
-// app.use(cors(corsOptions));
+
+app.use(cors());
 
 // Routes
+// app.use("/api/product", productRouter);
+// app.use("/api/cart", cartRouter);
+// app.use("/api/users", userRouter);
+
 app.use("/", viewsRoutes);
-app.use("/api/product", productRouter)
-app.use("/api/cart", cartRouter)
-app.use("/api/users", userRouter)
 
 const usersExtendRouter = new UsersExtendRouter();
 const productExtendRouter = new ProductExtendRouter();
@@ -88,7 +82,7 @@ const cartExtendRouter = new CartExtendRouter();
 
 app.use("/api/extend/users", usersExtendRouter.getRouter());
 app.use("/api/extend/products", productExtendRouter.getRouter());
-app.use("/api/extend/cart", cartExtendRouter.getRouter())
+app.use("/api/extend/cart", cartExtendRouter.getRouter());
 
 const SERVER_PORT = config.port;
 
@@ -97,10 +91,9 @@ app.listen(SERVER_PORT, console.log(`Server running on port ${SERVER_PORT}`));
 //TODO: MongoSingleton
 const mongoInstance = async () => {
   try {
-      await MongoSingleton.getInstance()
+    await MongoSingleton.getInstance();
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
-}
-mongoInstance()
-
+};
+mongoInstance();

@@ -1,4 +1,3 @@
-import { Router } from "express";
 import { getProductController, postProductController, putProductController, deleteProductController } from "../../controllers/product.controller.js";
 import CustomRouter from './custom.router.js';
 

@@ -1,8 +1,8 @@
-import { obtenerProductos, actualizarProducto , createProducto, eliminarProducto } from "../services/product.services.js";
+import { productService } from "../services/service.js";
 
 export const getProductController = async (req, res) => {
   try {
-    const productos = await obtenerProductos();
+    const productos = await productService.getAll();
     res.json(productos);
   } catch (error) {
     console.error("Error al obtener los productos:", error);
@@ -21,7 +21,7 @@ export const postProductController = async (req, res) => {
       code,
       stock,
     };
-    await createProducto(producto);
+    await productService.save(producto);
     res.json("Producto creado con éxito");
   } catch (error) {
     console.error("Error al crear el producto:", error);
@@ -34,31 +34,27 @@ export const putProductController = async (req, res) => {
     const { id } = req.params;
     const nuevoProd = req.body;
 
-    await actualizarProducto(id, nuevoProd);
+    await productService.update(id, nuevoProd);
 
     res.json("Producto actualizado con éxito");
   } catch (error) {
     console.error("Error al actualizar el producto:", error);
     res.status(500).json({ error: "Error interno del servidor." });
   }
-
-
 };
 
-
 export const deleteProductController = async (req, res) => {
-    try {
-      const { id } = req.params; // Obtener el ID del producto a eliminar
-  
-      // Lógica para eliminar el producto utilizando la función correspondiente del servicio o DAO
-      await eliminarProducto(id);
-  
-      // Respuesta exitosa en formato JSON
-      res.json({ message: "Producto eliminado exitosamente" });
-    } catch (error) {
-      // Manejo de errores: si hay algún error, devolver un código de estado 500 y un mensaje de error
-      console.error("Error al eliminar el producto:", error);
-      res.status(500).json({ error: "Error interno del servidor." });
-    }
-  };
-  
+  try {
+    const { id } = req.params; // Obtener el ID del producto a eliminar
+
+    // Lógica para eliminar el producto utilizando el servicio de productos
+    await productService.delete(id);
+
+    // Respuesta exitosa en formato JSON
+    res.json({ message: "Producto eliminado exitosamente" });
+  } catch (error) {
+    // Manejo de errores: si hay algún error, devolver un código de estado 500 y un mensaje de error
+    console.error("Error al eliminar el producto:", error);
+    res.status(500).json({ error: "Error interno del servidor." });
+  }
+};

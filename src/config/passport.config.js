@@ -1,6 +1,5 @@
 import passport from "passport";
 import passportLocal from "passport-local";
-import userModel from "../models/users.model.js";
 import { createHash, isValidPassword } from "../dirname.js";
 import GitHubStrategy from "passport-github2";
 import jwtStrategy from 'passport-jwt';
