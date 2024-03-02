@@ -1,5 +1,4 @@
 import { userModel } from "./models/users.js"
-import bcrypt from "bcrypt"
 import { isValidPassword } from "../../../dirname.js"
 
 export default class UserServiceMongo {
@@ -77,9 +76,9 @@ export default class UserServiceMongo {
         return null;
       }
   
-      // Verificar la contraseña
-      const isValidPassword = bcrypt.compare(password, user.password);
-      if (!isValidPassword) {
+      // Verificar la contraseña utilizando isValidPassword
+      const isValid = isValidPassword(user, password);
+      if (!isValid) {
         // La contraseña es incorrecta
         return null;
       }
@@ -91,6 +90,5 @@ export default class UserServiceMongo {
       throw error;
     }
   };
-  
   
 }

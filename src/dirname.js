@@ -48,12 +48,17 @@ export const generateJWToken = (user) => {
 export const authToken = (req, res, next) => {
   // The JWT token is saved in the authorization headers.
   const authHeader = req.headers.authorization;
+
+  console.log("Hola mudno");
+  console.log(authHeader);
   if (!authHeader) {
     return res
       .status(401)
       .send({ error: "User not authenticated or missing token." });
   }
   const token = authHeader.split(" ")[1]; // Split to remove the Bearer word.
+
+
   // Validate token
   jwt.verify(token, PRIVATE_KEY, (error, credentials) => {
     if (error)

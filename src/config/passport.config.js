@@ -20,6 +20,7 @@ const initializePassport = () => {
       },
       async (jwt_payload, done) => {;
         try {
+          console.log("hola como estas");
           return done(null, jwt_payload.user);
         } catch (error) {
           return done(error);

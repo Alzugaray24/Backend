@@ -49,15 +49,15 @@ export default class CustomRouter {
     };
 
     handlePolicies = policies => (req, res, next) => {
-        console.log("Politicas a evaluar:");
-        console.log(policies);
 
         //Validar si tiene acceso publico:
         if (policies[0] === "PUBLIC") return next();
 
+        console.log("desde policies");
+
         //El JWT token se guarda en los headers de autorización.
         const authHeader = req.headers.authorization;
-        console.log("Token present in header auth:");
+
         console.log(authHeader);
 
         if (!authHeader) {

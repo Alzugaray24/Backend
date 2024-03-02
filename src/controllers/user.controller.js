@@ -1,6 +1,6 @@
 import { userService } from "../services/service.js";
 import { generateJWToken } from "../dirname.js";
-import { createHash, isValidPassword } from "../dirname.js"
+import { createHash, isValidPassword } from "../dirname.js";
 
 export const getAllUsersController = async (req, res) => {
   try {
@@ -57,9 +57,6 @@ export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log(email);
-    console.log(password);
-
     if (!email || !password) {
       return res
         .status(400)
@@ -67,8 +64,6 @@ export const loginController = async (req, res) => {
     }
 
     const user = await userService.loginUser(email, password);
-
-    console.log(user);
 
     if (user === null || !isValidPassword(user, password)) {
       return res
@@ -101,7 +96,11 @@ export const logoutController = async (req, res) => {
 
 export const profileController = async (req, res) => {
   try {
+    console.log("desde controller");
     const user = req.user;
+
+    console.log(user);
+
     if (!user) {
       return res.status(401).json({ error: "Usuario no autenticado" });
     }

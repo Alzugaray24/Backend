@@ -42,7 +42,7 @@ export default class UsersExtendRouter extends CustomRouter {
       res.sendSuccess(req.user);
     });
 
-    this.post("/login", ["PUBLIC"], loginController);
+    this.post("/login", ["PUBLIC"] , loginController);
 
     this.post("/register", ["PUBLIC"], registerUserController);
 
